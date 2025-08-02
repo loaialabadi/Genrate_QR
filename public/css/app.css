@@ -1,22 +1,22 @@
 body {
-  font-family: 'Tajawal', sans-serif, Arial, sans-serif;
+  font-family: 'Tajawal', sans-serif;
   background-color: #f5f7fa;
   margin: 0;
   padding: 0;
+  direction: rtl;
   color: #333;
-  direction: rtl; /* اتجاه النص من اليمين إلى اليسار */
 }
 
 .topbar {
-  background-color: #0d6efd;
-  color: white;
+  background: linear-gradient(to left, #126cc7, #0d6efd);
+  color: #fff;
   padding: 15px 25px;
   font-size: 1.3rem;
   font-weight: 700;
   display: flex;
   justify-content: space-between;
   align-items: center;
-  box-shadow: 0 3px 6px rgb(13 110 253 / 0.3);
+  box-shadow: 0 4px 10px rgba(0,0,0,0.15);
   position: fixed;
   top: 0;
   right: 0;
@@ -24,97 +24,86 @@ body {
   z-index: 1050;
 }
 
-.topbar .actions i {
-  font-size: 1.4rem;
-  margin-right: 20px; /* لأن القائمة على اليمين */
-  cursor: pointer;
-  transition: color 0.3s ease;
-}
-.topbar .actions i:hover {
-  color: #cce5ff;
+.topbar img {
+  border-radius: 6px;
+  background: #fff;
+  padding: 4px;
+  box-shadow: 0 0 8px rgba(255,255,255,0.4);
 }
 
 .sidebar {
-  background-color: #343a40;
+  background-color: #1e2a38;
   width: 250px;
   position: fixed;
-  top: 56px; /* ارتفاع الشريط العلوي */
-  right: 0; /* قائمة على اليمين */
+  top: 56px;
+  right: 0;
   bottom: 0;
   padding-top: 20px;
-  color: #dee2e6;
+  color: #fff;
   transition: width 0.3s ease;
   overflow-y: auto;
-  box-shadow: -3px 0 6px rgb(0 0 0 / 0.1); /* ظل على اليسار */
-  z-index: 1040;
-}
-
-.sidebar.collapsed {
-  width: 70px;
-}
-
-.sidebar h4 {
-  padding: 0 20px 15px 20px;
-  font-weight: 700;
-  font-size: 1.1rem;
-  border-bottom: 1px solid #495057;
-  margin-bottom: 20px;
+  box-shadow: -3px 0 8px rgba(0,0,0,0.1);
 }
 
 .sidebar a {
   display: flex;
   align-items: center;
   padding: 12px 25px;
-  color: #adb5bd;
+  color: #d1d1d1;
   text-decoration: none;
   font-weight: 500;
   font-size: 1rem;
   transition: background-color 0.3s, color 0.3s;
-  white-space: nowrap;
 }
 .sidebar a i {
-  margin-left: 15px; /* أيقونات على اليسار داخل القائمة على اليمين */
+  margin-left: 12px;
   font-size: 1.3rem;
-  min-width: 24px;
-  text-align: center;
 }
 .sidebar a:hover,
 .sidebar a.active {
-  background-color: #495057;
+  background-color: #0d6efd;
   color: #fff;
 }
 
-.sidebar.collapsed a span {
-  display: none;
-}
-.sidebar.collapsed a {
-  justify-content: center;
-  padding: 12px 0;
-}
-
 .content {
-  margin-right: 250px; /* المحتوى يبدأ بعد الشريط الجانبي */
-  padding: 85px 30px 30px 30px; /* padding علوي لتجنب تداخل topbar */
+  margin-right: 250px;
+  padding: 85px 30px 30px 30px;
+  background: rgba(255, 255, 255, 0.95);
+  border-radius: 12px;
+  box-shadow: 0 8px 20px rgba(0,0,0,0.05);
   min-height: 100vh;
-  transition: margin-right 0.3s ease;
-  background-color: #fff;
-  box-shadow: 0 0 12px rgb(0 0 0 / 0.05);
-  border-radius: 8px;
 }
 
-.sidebar.collapsed ~ .content {
-  margin-right: 70px;
+
+
+
+
+
+
+
+.form-card {
+  background-color: #ffffff;
+  border: none;
+  border-radius: 12px;
+  box-shadow: 0 5px 20px rgba(0, 0, 0, 0.05);
+  padding: 20px;
+  margin-top: 20px;
 }
 
-/* إشعار النجاح */
-.alert-success {
-  font-size: 1.1rem;
-  display: flex;
-  align-items: center;
-  gap: 12px;
-  box-shadow: 0 3px 8px rgb(40 167 69 / 0.3);
-  border-radius: 8px;
+.form-label {
+  font-weight: 600;
+  color: #333;
 }
-.alert-success i {
-  font-size: 1.5rem;
+
+.form-control,
+.form-select {
+  border-radius: 8px;
+  border: 1px solid #ced4da;
+  transition: border-color 0.3s, box-shadow 0.3s;
+}
+
+.form-control:focus,
+.form-select:focus {
+  border-color: #0d6efd;
+  box-shadow: 0 0 0 0.2rem rgba(13, 110, 253, 0.15);
 }

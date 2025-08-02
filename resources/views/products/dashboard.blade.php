@@ -34,7 +34,7 @@
                 </td>
                 <td>
                     @if($product->qr_code)
-                        <a href="{{ asset('storage/' . $product->qr_code) }}" target="_blank" class="btn btn-primary btn-sm mb-1">عرض</a><br>
+<a href="{{ route('products.viewQr', $product) }}" target="_blank" class="btn btn-primary btn-sm mb-1">عرض</a>
                         <button onclick="printImage('{{ asset('storage/' . $product->qr_code) }}')" class="btn btn-success btn-sm">طباعة</button>
                     @else
                         لا توجد صورة
@@ -57,26 +57,27 @@ function printImage(imageUrl) {
         <html lang="ar" dir="rtl">
             <head>
                 <meta charset="UTF-8" />
-                <title>طباعة QR Code بحجم A4</title>
+                <title>طباعة QR</title>
                 <style>
                     @page {
                         size: A4 portrait;
-                        margin: 20mm;
+                        margin: 0;
                     }
-                    body {
+                    html, body {
                         margin: 0;
                         padding: 0;
+                        height: 100%;
+                        width: 100%;
+                    }
+                    body {
                         display: flex;
                         justify-content: center;
                         align-items: center;
-                        height: 297mm;
-                        width: 210mm;
                     }
                     img {
-                        max-width: 180mm;
-                        max-height: 180mm;
-                        width: auto;
-                        height: auto;
+                        width: 180mm;
+                        height: 180mm;
+                        object-fit: contain;
                         image-rendering: crisp-edges;
                     }
                 </style>
@@ -88,7 +89,7 @@ function printImage(imageUrl) {
                         window.print();
                         window.onafterprint = function() {
                             window.close();
-                        }
+                        };
                     };
                 <\/script>
             </body>
@@ -96,5 +97,6 @@ function printImage(imageUrl) {
     `);
     printWindow.document.close();
 }
+
 </script>
 @endsection

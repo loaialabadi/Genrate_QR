@@ -17,14 +17,17 @@
 </head>
 <body>
 
-  <div class="topbar">
-    <div class="logo">لوحة التحكم لإعلانات الباركود - محافظة قنا</div>
-    <div class="actions">
-      <i class="fas fa-bell" title="الإشعارات"></i>
-      <i class="fas fa-user-circle" title="حسابي"></i>
-      <i id="toggleSidebar" class="fas fa-bars" title="تبديل القائمة"></i>
+
+    <div class="topbar">
+    <div class="logo-section" style="display: flex; align-items: center; gap: 15px;">
+        <img src="{{ asset('images/logo2.png') }}" alt="شعار قنا" height="50" />
+        <span>منظومة الإعلانات - محافظة قنا</span>
     </div>
-  </div>
+    <div class="actions">
+        <i class="fas fa-user-circle"></i>
+    </div>
+</div>
+
 
   <div class="sidebar" id="sidebar">
     <h4>القائمة</h4>

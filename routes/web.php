@@ -26,3 +26,7 @@ Route::get('/products/all', [ProductController::class, 'all'])->name('products.a
 
 // تحميل Excel حسب النوع
 Route::get('/products/export/{type}', [ProductController::class, 'export'])->name('products.export');
+
+
+
+Route::get('/qr/view/{product}', [ProductController::class, 'viewQr'])->name('products.viewQr');

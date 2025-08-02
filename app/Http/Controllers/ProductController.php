@@ -142,4 +142,13 @@ class ProductController extends Controller
 
         return view('products.all', compact('products'));
     }
+
+
+
+
+    public function viewQr(Product $product)
+{
+    return view('products.qr_view', compact('product'));
+}
+
 }
