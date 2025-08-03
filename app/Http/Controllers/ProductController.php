@@ -26,63 +26,74 @@ class ProductController extends Controller
     public function dashboard()
     {
         $products = Product::all();
+        
         return view('products.dashboard', compact('products'));
     }
 
     /**
      * حفظ إعلان جديد مع توليد QR Code وحفظه
      */
-    public function store(Request $request)
-    {
-        $request->validate([
-            'owner' => 'required|string',
-            'type' => 'required|string',
-            'size' => 'required|string',
-            'license_number' => 'required|string',
-            'start_date' => 'required|date',
-            'end_date' => 'required|date|after_or_equal:start_date',
-            'coordinates' => 'required|string',
-        ]);
+public function store(Request $request)
+{
+    $request->validate([
+        'license_number' => 'required|string',
+        'owner' => 'required|string',
+        'category' => 'required|string',
+        'national_id' => 'required|string',
+        'start_date' => 'required|date',
+        'end_date' => 'required|date|after_or_equal:start_date',
+        'location' => 'required|string',
+        'road_class' => 'required|string',
+        'type' => 'required|string',
+        'size' => 'required|string',
+    ]);
 
-        // إعداد نص الـ QR Code
-        $qrText = "صاحب الإعلان: {$request->owner}\n"
-                . "نوع الإعلان: {$request->type}\n"
-                . "المقاسات: {$request->size}\n"
-                . "رقم الرخصة: {$request->license_number}\n"
-                . "تاريخ البداية: {$request->start_date}\n"
-                . "تاريخ النهاية: {$request->end_date}\n"
-                . "الإحداثيات: {$request->coordinates}";
+    // نص QR Code
+    $qrText = "كود الترخيص: {$request->license_number}\n"
+            . "اسم العميل: {$request->owner}\n"
+            . "فئة الإعلان: {$request->category}\n"
+            . "الرقم القومي: {$request->national_id}\n"
+            . "بداية الترخيص: {$request->start_date}\n"
+            . "نهاية الترخيص: {$request->end_date}\n"
+            . "عنوان الموقع: {$request->location}\n"
+            . "فئة الطريق: {$request->road_class}\n"
+            . "نوع الإعلان: {$request->type}\n"
+            . "المقاسات: {$request->size}";
 
-        // إعداد اسم ملف نظيف وآمن
-        $name = trim($request->owner);
-        $name = preg_replace('/\s+/', '_', $name);
-        $name = preg_replace('/[^\p{L}\p{N}_-]/u', '', $name);
-        $name = trim($name, '_-');
+    // اسم ملف QR
+    $name = trim($request->owner);
+    $name = preg_replace('/\s+/', '_', $name);
+    $name = preg_replace('/[^\p{L}\p{N}_-]/u', '', $name);
+    $name = trim($name, '_-');
+    $filename = 'qrcodes/' . $name . '_' . time() . '.png';
 
-        $filename = 'qrcodes/' . $name . '_' . time() . '.png';
+    // توليد QR
+    $qrImage = QrCode::encoding('UTF-8')
+                    ->format('png')
+                    ->size(800)
+                    ->generate($qrText);
 
-        // توليد صورة QR Code وتخزينها
-        $qrImage = QrCode::encoding('UTF-8')
-                        ->format('png')
-                        ->size(800)
-                        ->generate($qrText);
+    Storage::disk('public')->put($filename, $qrImage);
 
-        Storage::disk('public')->put($filename, $qrImage);
+    // حفظ في قاعدة البيانات
+Product::create([
+    'owner' => $request->owner,
+    'type' => $request->type,
+    'size' => $request->size,
+    'national_id' => $request->national_id,
+    'license_number' => $request->license_number,
+    'start_date' => $request->start_date,
+    'end_date' => $request->end_date,
+    'location' => $request->location,
+    'coordinates' => $request->coordinates,
+    'category' => $request->category, // أضف هذا
+    'qr_code' => $filename,
+    'road_class' => $request->road_class,
+]);
 
-        // حفظ البيانات في قاعدة البيانات
-        Product::create([
-            'owner' => $request->owner,
-            'type' => $request->type,
-            'size' => $request->size,
-            'license_number' => $request->license_number,
-            'start_date' => $request->start_date,
-            'end_date' => $request->end_date,
-            'coordinates' => $request->coordinates,
-            'qr_code' => $filename,
-        ]);
 
-        return redirect()->route('products.dashboard')->with('success', 'تم إضافة المنتج بنجاح!');
-    }
+    return redirect()->route('products.dashboard')->with('success', 'تم إضافة الإعلان بنجاح!');
+}
 
     /**
      * تصدير الإعلانات إلى ملف Excel حسب النوع (قريب الانتهاء، منتهي، أو الكل)
@@ -138,7 +149,7 @@ class ProductController extends Controller
             $query->where('license_number', 'like', '%' . $request->license_number . '%');
         }
 
-        $products = $query->orderByDesc('id')->get();
+$products = $query->orderBy('id')->get();
 
         return view('products.all', compact('products'));
     }
